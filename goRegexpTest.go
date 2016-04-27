@@ -1,21 +1,25 @@
+/*
+This is a simple practice program
+for checking the regexp
+
+version 0.1
+2016-4-27
+by Jack Yip
+
+*/
+
 package main
 
 import (
-	"strings"
+	"regexp"
 
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
 )
 
-type MyMainWindow struct {
-	*walk.MainWindow
-}
-
 func main() {
 	var inTE, outTE *walk.TextEdit
 	var lnEdit *walk.LineEdit
-
-	mw := new(MyMainWindow)
 
 	MainWindow{
 		Title:   "Go语言正则表达式测试工具",
@@ -33,22 +37,19 @@ func main() {
 					PushButton{
 						Text: "Check",
 						OnClicked: func() {
-							var hwnd winapi.HWND
-							winapi.MessageBox(hwnd, Text("保存成功请重启生效"), Text("提示"), winapi.MB_OK)
+							outTE.SetText("")
+							//outTE.SetText(strings.ToUpper(inTE.Text()))
+							part := regexp.MustCompile(lnEdit.Text())
+							str := inTE.Text()
+							outTE.SetText(part.FindString(str))
 						},
 					},
 				},
 			},
-			HSplitter{
+			VSplitter{
 				Children: []Widget{
 					TextEdit{AssignTo: &inTE},
 					TextEdit{AssignTo: &outTE, ReadOnly: true},
-				},
-			},
-			PushButton{
-				Text: "Check",
-				OnClicked: func() {
-					outTE.SetText(strings.ToUpper(inTE.Text()))
 				},
 			},
 		},
